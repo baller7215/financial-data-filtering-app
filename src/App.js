@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import './App.css';
 import Switch from './Switch';
 import axios from 'axios';
+import { ChevronUp, ChevronDown } from 'lucide-react';
 
 
 // custom colors
@@ -24,7 +25,7 @@ function App() {
     minNetIncome: '',
     maxNetIncome: '',
   });
-  const [sortConfig, setSortConfig] = useState({ key: 'date', direction: 'asc' });
+  const [sortConfig, setSortConfig] = useState({ key: '', direction: '' });
 
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
@@ -77,9 +78,9 @@ function App() {
   };
 
   const handleSort = (key) => {
-    let direction = 'asc';
-    if (sortConfig.key === key && sortConfig.direction === 'asc') {
-      direction = 'desc';
+    let direction = 'desc';
+    if (sortConfig.key === key && (sortConfig.direction === 'desc' || sortConfig.direction === '')) {
+      direction = 'asc';
     }
     setSortConfig({ key, direction });
 
@@ -114,23 +115,59 @@ function App() {
         <table className="w-full border-collapse border border-gray-500">
           <thead>
             <tr>
-              <th onClick={() => handleSort('date')} className="cursor-pointer">Date</th>
-              <th onClick={() => handleSort('revenue')} className="cursor-pointer">Revenue</th>
-              <th onClick={() => handleSort('netIncome')} className="cursor-pointer">Net Income</th>
-              <th>Gross Profit</th>
-              <th>EPS</th>
-              <th>Operating Income</th>
+              <th 
+                onClick={() => handleSort('date')} 
+                className="border border-gray-500 px-4 py-2 cursor-pointer"
+              >
+                <div className="flex justify-center items-center gap-1">
+                  Date
+                  {sortConfig.key === 'date' && (
+                    sortConfig.direction === 'asc' 
+                      ? <ChevronUp size={20} className='my-auto' /> 
+                      : <ChevronDown size={20} className='my-auto' />
+                  )}
+                </div>
+              </th>
+              <th 
+                onClick={() => handleSort('revenue')} 
+                className="border border-gray-500 px-4 py-2 cursor-pointer"
+              >
+                <div className="flex justify-center items-center gap-1">
+                  Revenue
+                  {sortConfig.key === 'revenue' && (
+                    sortConfig.direction === 'asc' 
+                      ? <ChevronUp size={20} className='my-auto' /> 
+                      : <ChevronDown size={20} className='my-auto' />
+                  )}
+                </div>
+              </th>
+              <th
+                onClick={() => handleSort('netIncome')}
+                className="border border-gray-500 px-4 py-2 cursor-pointer"
+              >
+                <div className="flex justify-center items-center gap-1">
+                  Net Income
+                  {sortConfig.key === 'netIncome' && (
+                    sortConfig.direction === 'asc' 
+                      ? <ChevronUp size={20} className='my-auto' /> 
+                      : <ChevronDown size={20} className='my-auto' />
+                  )}
+                </div>
+              </th>
+              <th className="border border-gray-500 px-4 py-2">Gross Profit</th>
+              <th className="border border-gray-500 px-4 py-2">EPS</th>
+              <th className="border border-gray-500 px-4 py-2">Operating Income</th>
             </tr>
           </thead>
           <tbody>
             {filteredData.map((item, index) => (
-              <tr key={index} className="border-t border-gray-500 text-center">
-                <td>{item.date}</td>
-                <td>${formatter.format(item.revenue)}</td>
-                <td>${formatter.format(item.netIncome)}</td>
-                <td>${formatter.format(item.grossProfit)}</td>
-                <td>{item.eps}</td>
-                <td>{formatter.format(item.operatingIncome)}</td>
+              <tr key={index} className="text-center">
+                <td className="border border-gray-500 px-4 py-2">{item.date}</td>
+                <td className="border border-gray-500 px-4 py-2">${formatter.format(item.revenue)}</td>
+                <td className="border border-gray-500 px-4 py-2">${formatter.format(item.netIncome)}</td>
+                <td className="border border-gray-500 px-4 py-2">${formatter.format(item.grossProfit)}</td>
+                <td className="border border-gray-500 px-4 py-2">{item.eps}</td>
+                <td className="border border-gray-500 px-4 py-2">${formatter.format(item.operatingIncome)}</td>
               </tr>
             ))}
           </tbody>
