@@ -97,11 +97,11 @@ function App() {
 
   return (
     <div className={`min-h-screen ${theme === 'dark' ? 'bg-gradient-to-bl from-background to-purple text-white' : 'bg-gradient-to-bl from-white to-purple text-gray-900'}`}>
-      <header className="py-5 px-10">
+      <header className="py-5 px-5 sm:px-10">
         <Switch isChecked={theme === 'light'} onChange={toggleTheme} />
       </header>
 
-      <div className="p-5">
+      <div className="py-5 px-5 sm:px-10">
         <div className="grid gap-4 mb-4">
           {/* date filter */}
           <div className='grid grid-cols-2 gap-4 justify-between'>
@@ -153,7 +153,7 @@ function App() {
                     className={`min-w-32 border px-4 py-2 cursor-pointer transition ease-in-out duration-300 sticky top-0 z-1 ${
                       theme === 'dark' ? 'hover:bg-darkBlue hover:text-lightBlue' : 'hover:bg-lightBlue hover:text-darkBlue'
                     } ${
-                      sortConfig.key === key ? 'sticky left-0 z-10 bg-lightBlue text-darkBlue' : ''
+                      sortConfig.key === key ? `sticky left-0 z-10 ${theme === 'dark' ? `bg-darkBlue text-lightBlue` : 'bg-lightBlue text-darkBlue'}` : ''
                     }`}
                   >
                     <div className="flex justify-between items-center capitalize">
@@ -176,7 +176,7 @@ function App() {
                     <td
                       key={key}
                       className={`border px-4 py-2 ${
-                        sortConfig.key === key ? 'sticky left-0 z-10 bg-lightBlue text-darkBlue' : ''
+                        sortConfig.key === key ? `sticky left-0 z-10 ${theme === 'dark' ? `bg-darkBlue text-lightBlue` : 'bg-lightBlue text-darkBlue'}` : ''
                       }`}
                     >
                       {key === 'date' ? item.date : `$${formatter.format(item[key])}`}
