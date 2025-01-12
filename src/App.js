@@ -104,16 +104,16 @@ function App() {
       </header>
 
       <div className="py-5 px-5 sm:px-10 flex flex-col gap-10">
-        <div className="grid gap-4 mb-4">
+        <div className={`grid gap-4 mb-4 ${theme === 'dark' ? 'text-lightBlue' : 'text-darkBlue'}`}>
           {/* date filter */}
           <div className='grid grid-cols-2 gap-4 justify-between'>
             <div className='flex flex-col gap-1'>
               <p>Start Date</p>
-              <input className='w-full rounded-md px-5 py-2 shadow-md' type="date" name="startDate" value={filters.startDate ? filters.startDate : ''} placeholder='Start Date' onChange={handleFilterChange} />
+              <input className='w-full rounded-md px-5 py-2 shadow-md bg-white/50 text-darkBlue placeholder:text-darkBlue' type="date" name="startDate" value={filters.startDate ? filters.startDate : ''} placeholder='Start Date' onChange={handleFilterChange} />
             </div>
             <div className='flex flex-col gap-1'>
               <p>End Date</p>
-              <input className='w-full rounded-md px-5 py-2 shadow-md' type="date" name="endDate" value={filters.endDate ? filters.endDate : 'End Date'} placeholder='End Date' onChange={handleFilterChange} />
+              <input className='w-full rounded-md px-5 py-2 shadow-md bg-white/50 text-darkBlue placeholder:text-darkBlue' type="date" name="endDate" value={filters.endDate ? filters.endDate : 'End Date'} placeholder='End Date' onChange={handleFilterChange} />
             </div>
           </div>
           
@@ -121,11 +121,11 @@ function App() {
           <div className='grid grid-cols-2 gap-4 justify-between'>
             <div className='flex flex-col gap-1'>
               <p>Min Revenue</p>
-              <input className='w-full rounded-md px-5 py-2 shadow-md' type="number" name="minRevenue" value={filters.minRevenue ? filters.minRevenue : ''} placeholder='Min Revenue' onChange={handleFilterChange} />
+              <input className='w-full rounded-md px-5 py-2 shadow-md bg-white/50 text-darkBlue placeholder:text-darkBlue' type="number" name="minRevenue" value={filters.minRevenue ? filters.minRevenue : ''} placeholder='Min Revenue' onChange={handleFilterChange} />
             </div>
             <div className='flex flex-col gap-1'>
               <p>Max Revenue</p>
-              <input className='w-full rounded-md px-5 py-2 shadow-md' type="number" name="maxRevenue" value={filters.maxRevenue ? filters.maxRevenue : 'Max Revenue'} placeholder='Max Revenue' onChange={handleFilterChange} />
+              <input className='w-full rounded-md px-5 py-2 shadow-md bg-white/50 text-darkBlue placeholder:text-darkBlue' type="number" name="maxRevenue" value={filters.maxRevenue ? filters.maxRevenue : 'Max Revenue'} placeholder='Max Revenue' onChange={handleFilterChange} />
             </div>
           </div>
           
@@ -133,23 +133,22 @@ function App() {
           <div className='grid grid-cols-2 gap-4 justify-between'>
             <div className='flex flex-col gap-1'>
               <p>Min Net Income</p>
-              <input className='w-full rounded-md px-5 py-2 shadow-md' type="number" name="minNetIncome" value={filters.minNetIncome ? filters.minNetIncome : ''} placeholder='Min Net Income' onChange={handleFilterChange} />
+              <input className='w-full rounded-md px-5 py-2 shadow-md bg-white/50 text-darkBlue placeholder:text-darkBlue' type="number" name="minNetIncome" value={filters.minNetIncome ? filters.minNetIncome : ''} placeholder='Min Net Income' onChange={handleFilterChange} />
             </div>
             <div className='flex flex-col gap-1'>
               <p>Max Net Income</p>
-              <input className='w-full rounded-md px-5 py-2 shadow-md' type="number" name="maxNetIncome" value={filters.maxNetIncome ? filters.maxNetIncome : ''} placeholder='Max Net Income' onChange={handleFilterChange} />
+              <input className='w-full rounded-md px-5 py-2 shadow-md bg-white/50 text-darkBlue placeholder:text-darkBlue' type="number" name="maxNetIncome" value={filters.maxNetIncome ? filters.maxNetIncome : ''} placeholder='Max Net Income' onChange={handleFilterChange} />
             </div>
           </div>
           
           <div className='flex flex-row gap-5 justify-center'>
-            <button onClick={applyFilters} className="bg-blue-500 text-white rounded w-fit cursor-pointer px-10 py-3">Apply Filters</button>
-            {/* <RefreshCcw className='my-auto cursor-pointer' size={24} onClick={() => {setFilters(emptyFilters); applyFilters();}} /> */}
+            <button onClick={applyFilters} className={`${theme === 'dark' ? 'bg-lightBlue text-darkBlue hover:bg-white' : 'bg-darkBlue text-lightBlue hover:bg-background'} rounded w-fit cursor-pointer px-10 py-3`}>Apply Filters</button>
             <RefreshCcw 
               className='my-auto cursor-pointer' 
               size={28} 
               onClick={() => {
-                setFilters(emptyFilters);   // Clear all filters
-                setFilteredData(data);      // Reset the table data to the original fetched data
+                setFilters(emptyFilters); // clear filters
+                setFilteredData(data); // reset table data to original data
               }} 
             />
           </div>

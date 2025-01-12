@@ -2,7 +2,7 @@ import React from 'react';
 
 const Switch = ({ isChecked, onChange }) => {
   return (
-    <label className="relative flex items-center cursor-pointer">
+    <label className="relative flex items-center cursor-pointer ml-auto w-fit">
         <input 
             type="checkbox" 
             checked={isChecked} 
