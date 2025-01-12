@@ -45,7 +45,7 @@ function App() {
       setData(response.data);
       console.log('data', data);
       setFilteredData(response.data);
-      console.logt('filtered data', filteredData);
+      console.log('filtered data', filteredData);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -103,75 +103,93 @@ function App() {
 
       <div className="p-5">
         <div className="grid gap-4 mb-4">
-          <input type="date" name="startDate" placeholder="Start Date" onChange={handleFilterChange} />
-          <input type="date" name="endDate" placeholder="End Date" onChange={handleFilterChange} />
-          <input type="number" name="minRevenue" placeholder="Min Revenue" onChange={handleFilterChange} />
-          <input type="number" name="maxRevenue" placeholder="Max Revenue" onChange={handleFilterChange} />
-          <input type="number" name="minNetIncome" placeholder="Min Net Income" onChange={handleFilterChange} />
-          <input type="number" name="maxNetIncome" placeholder="Max Net Income" onChange={handleFilterChange} />
-          <button onClick={applyFilters} className="bg-blue-500 text-white py-2 px-4 rounded">Apply Filters</button>
+          {/* date filter */}
+          <div className='grid grid-cols-2 gap-4 justify-between'>
+            <div className='flex flex-col gap-2'>
+              <p>Start Date</p>
+              <input className='w-full' type="date" name="startDate" placeholder="Start Date" onChange={handleFilterChange} />
+            </div>
+            <div className='flex flex-col gap-2'>
+              <p>End Date</p>
+              <input className='w-full' type="date" name="endDate" placeholder="End Date" onChange={handleFilterChange} />
+            </div>
+          </div>
+          
+          {/* revenue filter */}
+          <div className='grid grid-cols-2 gap-4 justify-between'>
+            <div className='flex flex-col gap-2'>
+              <p>Min Revenue</p>
+              <input className='w-full' type="number" name="minRevenue" placeholder="Min Revenue" onChange={handleFilterChange} />
+            </div>
+            <div className='flex flex-col gap-2'>
+              <p>Max Revenue</p>
+              <input type="number" name="maxRevenue" placeholder="Max Revenue" onChange={handleFilterChange} />
+            </div>
+          </div>
+          
+          {/* income filter */}
+          <div className='grid grid-cols-2 gap-4 justify-between'>
+            <div className='flex flex-col gap-2'>
+              <p>Min Net Income</p>
+              <input type="number" name="minNetIncome" placeholder="Min Net Income" onChange={handleFilterChange} />
+            </div>
+            <div className='flex flex-col gap-2'>
+              <p>Max Net Income</p>
+              <input type="number" name="maxNetIncome" placeholder="Max Net Income" onChange={handleFilterChange} />
+            </div>
+          </div>
+          
+          <button onClick={applyFilters} className="bg-blue-500 text-white rounded w-fit px-10 py-3 mx-auto">Apply Filters</button>
         </div>
-
-        <table className="w-full border-collapse border border-gray-500">
-          <thead>
-            <tr>
-              <th 
-                onClick={() => handleSort('date')} 
-                className="border border-gray-500 px-4 py-2 cursor-pointer"
-              >
-                <div className="flex justify-center items-center gap-1">
-                  Date
-                  {sortConfig.key === 'date' && (
-                    sortConfig.direction === 'asc' 
-                      ? <ChevronUp size={20} className='my-auto' /> 
-                      : <ChevronDown size={20} className='my-auto' />
-                  )}
-                </div>
-              </th>
-              <th 
-                onClick={() => handleSort('revenue')} 
-                className="border border-gray-500 px-4 py-2 cursor-pointer"
-              >
-                <div className="flex justify-center items-center gap-1">
-                  Revenue
-                  {sortConfig.key === 'revenue' && (
-                    sortConfig.direction === 'asc' 
-                      ? <ChevronUp size={20} className='my-auto' /> 
-                      : <ChevronDown size={20} className='my-auto' />
-                  )}
-                </div>
-              </th>
-              <th
-                onClick={() => handleSort('netIncome')}
-                className="border border-gray-500 px-4 py-2 cursor-pointer"
-              >
-                <div className="flex justify-center items-center gap-1">
-                  Net Income
-                  {sortConfig.key === 'netIncome' && (
-                    sortConfig.direction === 'asc' 
-                      ? <ChevronUp size={20} className='my-auto' /> 
-                      : <ChevronDown size={20} className='my-auto' />
-                  )}
-                </div>
-              </th>
-              <th className="border border-gray-500 px-4 py-2">Gross Profit</th>
-              <th className="border border-gray-500 px-4 py-2">EPS</th>
-              <th className="border border-gray-500 px-4 py-2">Operating Income</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredData.map((item, index) => (
-              <tr key={index} className="text-center">
-                <td className="border border-gray-500 px-4 py-2">{item.date}</td>
-                <td className="border border-gray-500 px-4 py-2">${formatter.format(item.revenue)}</td>
-                <td className="border border-gray-500 px-4 py-2">${formatter.format(item.netIncome)}</td>
-                <td className="border border-gray-500 px-4 py-2">${formatter.format(item.grossProfit)}</td>
-                <td className="border border-gray-500 px-4 py-2">{item.eps}</td>
-                <td className="border border-gray-500 px-4 py-2">${formatter.format(item.operatingIncome)}</td>
+        
+        <div className="overflow-x-auto">
+          <table className="min-w-full border-collapse">
+            <thead className={`${theme === 'dark' ? 'bg-lightBlue text-darkBlue' : 'bg-darkBlue text-lightBlue'}`}>
+              <tr>
+                {['date', 'revenue', 'netIncome'].map((key) => (
+                  <th
+                    key={key}
+                    onClick={() => handleSort(key)}
+                    className={`min-w-32 border px-4 py-2 cursor-pointer transition ease-in-out duration-300 sticky top-0 z-1 ${
+                      theme === 'dark' ? 'hover:bg-darkBlue hover:text-lightBlue' : 'hover:bg-lightBlue hover:text-darkBlue'
+                    } ${
+                      sortConfig.key === key ? 'sticky left-0 z-10 bg-lightBlue text-darkBlue' : ''
+                    }`}
+                  >
+                    <div className="flex justify-between items-center capitalize">
+                      {key.replace(/([A-Z])/g, ' $1').toLowerCase()}
+                      {sortConfig.key === key &&
+                        (sortConfig.direction === 'asc' ? <ChevronUp size={16} /> : <ChevronDown size={16} />)}
+                    </div>
+                  </th>
+                ))}
+                <th className="border px-4 py-2">Gross Profit</th>
+                <th className="border px-4 py-2">EPS</th>
+                <th className="border px-4 py-2">Operating Income</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody className="divide-y divide-gray-600">
+              {filteredData.map((item, index) => (
+                <tr key={index} className="hover:bg-purple/10">
+                  {['date', 'revenue', 'netIncome'].map((key) => (
+                    <td
+                      key={key}
+                      className={`border px-4 py-2 ${
+                        sortConfig.key === key ? 'sticky left-0 z-10 bg-lightBlue text-darkBlue' : ''
+                      }`}
+                    >
+                      {key === 'date' ? item.date : `$${formatter.format(item[key])}`}
+                    </td>
+                  ))}
+                  <td className="border px-4 py-2">${formatter.format(item.grossProfit)}</td>
+                  <td className="border px-4 py-2">{item.eps}</td>
+                  <td className="border px-4 py-2">${formatter.format(item.operatingIncome)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
