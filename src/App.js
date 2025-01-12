@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import './App.css';
 import Switch from './Switch';
 import axios from 'axios';
-import { ChevronUp, ChevronDown } from 'lucide-react';
+import { ChevronUp, ChevronDown, RefreshCcw } from 'lucide-react';
 
 
 // custom colors
@@ -14,17 +14,19 @@ import { ChevronUp, ChevronDown } from 'lucide-react';
 
 
 function App() {
-  const [theme, setTheme] = useState('dark');
-  const [data, setData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
-  const [filters, setFilters] = useState({ // filters
+  const emptyFilters ={ // filters
     startDate: '',
     endDate: '',
     minRevenue: '',
     maxRevenue: '',
     minNetIncome: '',
     maxNetIncome: '',
-  });
+  };
+
+  const [theme, setTheme] = useState('dark');
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [filters, setFilters] = useState(emptyFilters);
   const [sortConfig, setSortConfig] = useState({ key: '', direction: '' });
 
   const toggleTheme = () => {
@@ -101,45 +103,57 @@ function App() {
         <Switch isChecked={theme === 'light'} onChange={toggleTheme} />
       </header>
 
-      <div className="py-5 px-5 sm:px-10">
+      <div className="py-5 px-5 sm:px-10 flex flex-col gap-10">
         <div className="grid gap-4 mb-4">
           {/* date filter */}
           <div className='grid grid-cols-2 gap-4 justify-between'>
-            <div className='flex flex-col gap-2'>
+            <div className='flex flex-col gap-1'>
               <p>Start Date</p>
-              <input className='w-full' type="date" name="startDate" placeholder="Start Date" onChange={handleFilterChange} />
+              <input className='w-full rounded-md px-5 py-2 shadow-md' type="date" name="startDate" value={filters.startDate ? filters.startDate : ''} placeholder='Start Date' onChange={handleFilterChange} />
             </div>
-            <div className='flex flex-col gap-2'>
+            <div className='flex flex-col gap-1'>
               <p>End Date</p>
-              <input className='w-full' type="date" name="endDate" placeholder="End Date" onChange={handleFilterChange} />
+              <input className='w-full rounded-md px-5 py-2 shadow-md' type="date" name="endDate" value={filters.endDate ? filters.endDate : 'End Date'} placeholder='End Date' onChange={handleFilterChange} />
             </div>
           </div>
           
           {/* revenue filter */}
           <div className='grid grid-cols-2 gap-4 justify-between'>
-            <div className='flex flex-col gap-2'>
+            <div className='flex flex-col gap-1'>
               <p>Min Revenue</p>
-              <input className='w-full' type="number" name="minRevenue" placeholder="Min Revenue" onChange={handleFilterChange} />
+              <input className='w-full rounded-md px-5 py-2 shadow-md' type="number" name="minRevenue" value={filters.minRevenue ? filters.minRevenue : ''} placeholder='Min Revenue' onChange={handleFilterChange} />
             </div>
-            <div className='flex flex-col gap-2'>
+            <div className='flex flex-col gap-1'>
               <p>Max Revenue</p>
-              <input type="number" name="maxRevenue" placeholder="Max Revenue" onChange={handleFilterChange} />
+              <input className='w-full rounded-md px-5 py-2 shadow-md' type="number" name="maxRevenue" value={filters.maxRevenue ? filters.maxRevenue : 'Max Revenue'} placeholder='Max Revenue' onChange={handleFilterChange} />
             </div>
           </div>
           
           {/* income filter */}
           <div className='grid grid-cols-2 gap-4 justify-between'>
-            <div className='flex flex-col gap-2'>
+            <div className='flex flex-col gap-1'>
               <p>Min Net Income</p>
-              <input type="number" name="minNetIncome" placeholder="Min Net Income" onChange={handleFilterChange} />
+              <input className='w-full rounded-md px-5 py-2 shadow-md' type="number" name="minNetIncome" value={filters.minNetIncome ? filters.minNetIncome : ''} placeholder='Min Net Income' onChange={handleFilterChange} />
             </div>
-            <div className='flex flex-col gap-2'>
+            <div className='flex flex-col gap-1'>
               <p>Max Net Income</p>
-              <input type="number" name="maxNetIncome" placeholder="Max Net Income" onChange={handleFilterChange} />
+              <input className='w-full rounded-md px-5 py-2 shadow-md' type="number" name="maxNetIncome" value={filters.maxNetIncome ? filters.maxNetIncome : ''} placeholder='Max Net Income' onChange={handleFilterChange} />
             </div>
           </div>
           
-          <button onClick={applyFilters} className="bg-blue-500 text-white rounded w-fit px-10 py-3 mx-auto">Apply Filters</button>
+          <div className='flex flex-row gap-5 justify-center'>
+            <button onClick={applyFilters} className="bg-blue-500 text-white rounded w-fit cursor-pointer px-10 py-3">Apply Filters</button>
+            {/* <RefreshCcw className='my-auto cursor-pointer' size={24} onClick={() => {setFilters(emptyFilters); applyFilters();}} /> */}
+            <RefreshCcw 
+              className='my-auto cursor-pointer' 
+              size={28} 
+              onClick={() => {
+                setFilters(emptyFilters);   // Clear all filters
+                setFilteredData(data);      // Reset the table data to the original fetched data
+              }} 
+            />
+          </div>
+          
         </div>
         
         <div className="overflow-x-auto">
