@@ -162,9 +162,9 @@ function App() {
                     </div>
                   </th>
                 ))}
-                <th className="border px-4 py-2">Gross Profit</th>
-                <th className="border px-4 py-2">EPS</th>
-                <th className="border px-4 py-2">Operating Income</th>
+                <th className="text-left border px-4 py-2">Gross Profit</th>
+                <th className="text-left border px-4 py-2">EPS</th>
+                <th className="text-left border px-4 py-2">Operating Income</th>
               </tr>
             </thead>
 
