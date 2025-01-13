@@ -3,6 +3,7 @@ import './App.css';
 import Switch from './Switch';
 import axios from 'axios';
 import { ChevronUp, ChevronDown, RefreshCcw } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 
 // custom colors
@@ -120,7 +121,14 @@ function App() {
           </div>
           
           <div className='flex flex-row gap-5 justify-center'>
-            <button onClick={fetchData} className={`${theme === 'dark' ? 'bg-lightBlue text-darkBlue hover:bg-white' : 'bg-darkBlue text-lightBlue hover:bg-background'} rounded-lg text-base w-fit cursor-pointer px-10 py-3`}>Apply Filters</button>
+            <motion.button
+              onClick={fetchData}
+              className={`${theme === 'dark' ? 'bg-lightBlue text-darkBlue hover:bg-white' : 'bg-darkBlue text-lightBlue hover:bg-background'} rounded-lg text-base w-fit cursor-pointer px-10 py-3`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Apply Filters
+            </motion.button>
             <RefreshCcw
               className="my-auto cursor-pointer"
               size={28}
@@ -133,7 +141,7 @@ function App() {
           
         </div>
         
-        <div className="overflow-x-auto">
+        <motion.div className="overflow-x-auto" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
           <table className="min-w-full border-collapse">
             <thead className={`${theme === 'dark' ? 'bg-lightBlue text-darkBlue' : 'bg-darkBlue text-lightBlue'}`}>
               <tr>
@@ -162,7 +170,13 @@ function App() {
 
             <tbody className="divide-y divide-gray-600">
               {data.map((item, index) => (
-                <tr key={index} className="hover:bg-purple/10">
+                <motion.tr
+                  key={index}
+                  className="hover:bg-purple/10"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3, delay: index * 0.05 }}
+                >
                   {['date', 'revenue', 'netIncome'].map((key) => (
                     <td
                       key={key}
@@ -176,11 +190,11 @@ function App() {
                   <td className="border px-4 py-2">${formatter.format(item.grossProfit)}</td>
                   <td className="border px-4 py-2">{item.eps}</td>
                   <td className="border px-4 py-2">${formatter.format(item.operatingIncome)}</td>
-                </tr>
+                </motion.tr>
               ))}
             </tbody>
           </table>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
