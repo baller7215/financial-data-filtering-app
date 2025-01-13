@@ -25,7 +25,6 @@ function App() {
 
   const [theme, setTheme] = useState('dark');
   const [data, setData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
   const [filters, setFilters] = useState(emptyFilters);
   const [sortConfig, setSortConfig] = useState({ key: '', direction: '' });
 
@@ -42,12 +41,12 @@ function App() {
 
   const fetchData = async () => {
     try {
-      console.log('api url:', `${apiUrl}/financial-data`);
-      const response = await axios.get(`${apiUrl}/financial-data`);
+      const query = new URLSearchParams(filters).toString();
+      console.log('query', `${apiUrl}/financial-data?${query}`);
+      const response = await axios.get(`${apiUrl}/financial-data?${query}`);
+      console.log('response', response.data);
       setData(response.data);
-      console.log('data', data);
-      setFilteredData(response.data);
-      console.log('filtered data', filteredData);
+      console.log('new data', data);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -58,27 +57,6 @@ function App() {
     setFilters({ ...filters, [name]: value });
   };
 
-  const applyFilters = () => {
-    const {
-      startDate, endDate, minRevenue, maxRevenue, minNetIncome, maxNetIncome,
-    } = filters;
-
-    const newFilteredData = data.filter(item => {
-      const date = item.date;
-      const revenue = item.revenue;
-      const netIncome = item.netIncome;
-
-      return (!startDate || date >= startDate)
-        && (!endDate || date <= endDate)
-        && (!minRevenue || revenue >= minRevenue)
-        && (!maxRevenue || revenue <= maxRevenue)
-        && (!minNetIncome || netIncome >= minNetIncome)
-        && (!maxNetIncome || netIncome <= maxNetIncome);
-    });
-
-    setFilteredData(newFilteredData);
-  };
-
   const handleSort = (key) => {
     let direction = 'desc';
     if (sortConfig.key === key && (sortConfig.direction === 'desc' || sortConfig.direction === '')) {
@@ -86,13 +64,13 @@ function App() {
     }
     setSortConfig({ key, direction });
 
-    const sortedData = [...filteredData].sort((a, b) => {
+    const sortedData = [...data].sort((a, b) => {
       if (a[key] < b[key]) return direction === 'asc' ? -1 : 1;
       if (a[key] > b[key]) return direction === 'asc' ? 1 : -1;
       return 0;
     });
 
-    setFilteredData(sortedData);
+    setData(sortedData);
   };
 
   const formatter = new Intl.NumberFormat('en-US');
@@ -142,14 +120,14 @@ function App() {
           </div>
           
           <div className='flex flex-row gap-5 justify-center'>
-            <button onClick={applyFilters} className={`${theme === 'dark' ? 'bg-lightBlue text-darkBlue hover:bg-white' : 'bg-darkBlue text-lightBlue hover:bg-background'} rounded w-fit cursor-pointer px-10 py-3`}>Apply Filters</button>
-            <RefreshCcw 
-              className='my-auto cursor-pointer' 
-              size={28} 
+            <button onClick={fetchData} className={`${theme === 'dark' ? 'bg-lightBlue text-darkBlue hover:bg-white' : 'bg-darkBlue text-lightBlue hover:bg-background'} rounded-lg text-base w-fit cursor-pointer px-10 py-3`}>Apply Filters</button>
+            <RefreshCcw
+              className="my-auto cursor-pointer"
+              size={28}
               onClick={() => {
-                setFilters(emptyFilters); // clear filters
-                setFilteredData(data); // reset table data to original data
-              }} 
+                setFilters(emptyFilters); // reset filters
+                setSortConfig({ key: '', direction: '' }); // reset sorting
+              }}
             />
           </div>
           
@@ -183,7 +161,7 @@ function App() {
             </thead>
 
             <tbody className="divide-y divide-gray-600">
-              {filteredData.map((item, index) => (
+              {data.map((item, index) => (
                 <tr key={index} className="hover:bg-purple/10">
                   {['date', 'revenue', 'netIncome'].map((key) => (
                     <td

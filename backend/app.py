@@ -26,12 +26,19 @@ def get_financial_data():
     data = fetch_financial_data()
 
     # Filter by query parameters
-    start_date = request.args.get('start_date')
-    end_date = request.args.get('end_date')
-    min_revenue = request.args.get('min_revenue', type=int)
-    max_revenue = request.args.get('max_revenue', type=int)
-    min_net_income = request.args.get('min_net_income', type=int)
-    max_net_income = request.args.get('max_net_income', type=int)
+    start_date = request.args.get('startDate')
+    end_date = request.args.get('endDate')
+    min_revenue = request.args.get('minRevenue', type=int)
+    max_revenue = request.args.get('maxRevenue', type=int)
+    min_net_income = request.args.get('minNetIncome', type=int)
+    max_net_income = request.args.get('maxNetIncome', type=int)
+
+    # print('start_date', start_date)
+    # print('end_date', end_date)
+    # print('min_revenue', min_revenue)
+    # print('max_revenue', max_revenue)
+    # print('min_net_income', min_net_income)
+    # print('max_net_income', max_net_income)
 
     filtered_data = [
         item for item in data
