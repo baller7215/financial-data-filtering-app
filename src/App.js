@@ -43,11 +43,11 @@ function App() {
   const fetchData = async () => {
     try {
       const query = new URLSearchParams(filters).toString();
-      console.log('query', `${apiUrl}/financial-data?${query}`);
+      // console.log('query', `${apiUrl}/financial-data?${query}`);
       const response = await axios.get(`${apiUrl}/financial-data?${query}`);
-      console.log('response', response.data);
+      // console.log('response', response.data);
       setData(response.data);
-      console.log('new data', data);
+      // console.log('new data', data);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
